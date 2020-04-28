@@ -12,16 +12,6 @@ def get_stock_ids():
     return list(ids)
 
 
-def get_stock_groups():
-    """
-    group numbers from tccim, to avoid searching useless group numbers.
-    its a helper for other parts of package to collect stock lists.
-    """
-    r = requests.get("http://www.tsetmc.com/Loader.aspx?ParTree=111C1213")
-    groups = re.findall(r"\d{2}", r.text)
-    return groups
-
-
 def get_stock_detail(stock_id: str) -> "stock":
     """
     Dowload stocks detail and save them to the database.
