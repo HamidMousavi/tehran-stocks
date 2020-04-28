@@ -4,7 +4,6 @@ import tehran_stocks.config as db
 from tehran_stocks.download import (
     get_all_price,
     get_stock_detail,
-    get_stock_groups,
     get_stock_ids,
     update_group,
     update_stock_price,
