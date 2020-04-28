@@ -38,9 +38,6 @@ def get_stock_detail(stock_id: str) -> "stock":
         int: number that represent group of stock
 
     """
-    exist = Stocks.query.filter_by(code=stock_id).first()
-    if exist:
-        return "exist"
     url = "http://www.tsetmc.com/Loader.aspx?ParTree=151311&i={}".format(stock_id)
     r = requests.get(url)
     stock = {"code": stock_id}
@@ -79,7 +76,15 @@ def get_stock_detail(stock_id: str) -> "stock":
     stock["group_code"] = re.findall(r"CSecVal='([\w\d]*)|$',", r.text)[0]
     if stock["name"] == "',DEven='',LSecVal='',CgrValCot='',Flow='',InstrumentID='":
         return False
-    db.session.add(Stocks(**stock))
+    exist = Stocks.query.filter_by(code=stock_id).first()
+    if exist:
+        exist.shareCount=stock["shareCount"]
+        exist.baseVol= stock["baseVol"]
+        exist.sectorPe=stock["sectorPe"]
+        exist.estimatedEps=stock["estimatedEps"]
+    else:
+        db.session.add(Stocks(**stock))
+
     try:
         db.session.commit()
     except:
